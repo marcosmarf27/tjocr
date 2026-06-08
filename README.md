@@ -62,12 +62,14 @@ tjocr <arquivo.pdf> [opções]
 
 | Opção | Padrão | Descrição |
 |-------|--------|-----------|
-| `-o, --output FILE` | stdout | Salva o markdown em arquivo |
-| `--dpi N` | `150` | Resolução: `72` (rápido) · `150` (padrão) · `300` (máximo) |
-| `--enhance` | off | Corrige o OCR com IA (mais lento; pode reescrever trechos) |
-| `--pages RANGE` | (todas) | Páginas específicas, ex: `1-5,10,15-20` |
-| `--lang CODE` | `pt` | Idioma do OCR |
-| `--quiet` | off | Não mostra o progresso |
+| `-o, --output FILE` | stdout | Salva o markdown em arquivo (sem isso, vai pro stdout — bom pra pipe) |
+| `--dpi N` | `150` | Resolução do OCR: `72` (rápido) · `150` (padrão) · `300` (máximo) |
+| `--enhance` | off | Corrige o OCR com IA (Gemini Vision): conserta datas/CPF/valores/nomes e remove marca d'água. Mais lento (~7–11 s/pg) e pode **reescrever** trechos — veja abaixo |
+| `--pages RANGE` | (todas) | Só algumas páginas, ex: `1-5,10,15-20` |
+| `--lang CODE` | `pt` | Idioma do OCR (ISO 639-1) |
+| `--engine NAME` | `paddle` | Motor de OCR: `paddle` (melhor p/ PT-BR) · `tesseract` · `none` (sem OCR, só texto nativo) |
+| `--key KEY` | — | API key avulsa, sobrepõe a env/config salva |
+| `--quiet` | off | Não mostra o progresso/resumo no stderr |
 
 As flags funcionam em qualquer posição. O markdown sai no `-o` (ou no stdout); o progresso e o
 resumo saem no stderr — então dá para usar em pipe.
@@ -79,6 +81,29 @@ tjocr processo.pdf -o processo.md
 tjocr matricula.pdf --enhance --pages 1-3 -o matricula.md
 tjocr doc.pdf | grep "CPF"
 ```
+
+## Corrigir o OCR com IA (`--enhance`)
+
+O OCR já roda **automaticamente** — não há flag para ligá-lo: a API decide, página a página,
+o que é escaneado (vai pro OCR) e o que já é texto digital (lê direto, sem OCR). O `--enhance`
+é um passo **opcional** _em cima_ disso.
+
+Com `--enhance` ligado, cada página que passou por OCR é revisada por uma IA de visão (Gemini):
+ela compara a imagem da página com o texto do OCR e **corrige** erros típicos — datas,
+CPF/CNPJ, valores, nomes, números de registro — além de **remover** ruído de layout (marca
+d'água, selo digital, QR de validação, rodapé de cartório).
+
+```bash
+tjocr matricula.pdf --enhance -o matricula.md            # liga o enhance
+tjocr matricula.pdf --enhance --pages 1-3 -o saida.md    # só nas páginas 1–3
+```
+
+- **Padrão: desligado.** Ligue só quando precisar — é mais lento (~7–11 s por página com OCR)
+  e tem custo maior.
+- **Use** em documentos degradados (datilografados antigos, matrículas, scans ruins) onde a
+  fidelidade de números/nomes importa.
+- **Cuidado:** é reconstrução por IA — pode **reescrever**, ou até inventar, um trecho. Revise
+  os dados críticos sempre que ligar.
 
 ## Como funciona
 
