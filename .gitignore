@@ -1,0 +1,6 @@
+# binários (distribuídos via Releases, não versionados)
+tjocr
+tjocr.exe
+tjocr_linux_amd64
+tjocr_windows_amd64.exe
+tjocr_*_amd64*
