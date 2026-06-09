@@ -51,8 +51,31 @@ tjocr config set        # cole a chave e tecle Enter
 tjocr config show       # confere (mostra a chave mascarada)
 ```
 
-A chave fica em `~/.config/tjocr/config.json` (Linux) ou `%AppData%\tjocr\config.json` (Windows).
-Alternativas: variável de ambiente `TJOCR_API_KEY`, ou `--key` no comando.
+Todos os subcomandos de `config`:
+
+| Comando | O que faz |
+|---------|-----------|
+| `config set` | Lê a chave do **teclado/stdin** (não fica no histórico). Aceita pipe: `echo "$KEY" \| tjocr config set` |
+| `config set-key KEY` | Salva a chave passada como argumento — **fica no histórico**; prefira `set` |
+| `config set-url URL` | Aponta para outra base URL da API (raro; o padrão é a produção) |
+| `config show` | Mostra a chave (mascarada), a base URL e o caminho do arquivo de config |
+
+A chave fica em `~/.config/tjocr/config.json` (Linux) ou `%AppData%\tjocr\config.json` (Windows),
+com permissão restrita.
+
+**Precedência da chave:** `--key` › env `TJOCR_API_KEY` › config salvo › env `TECJUSTICA_API_KEY` (legado).
+Usa a env própria `TJOCR_API_KEY` para não colidir com `TECJUSTICA_API_KEY`, que pode estar setada
+para outro serviço no seu ambiente.
+
+## Comandos
+
+```bash
+tjocr <arquivo.pdf> [opções]               # extrai o markdown (OCR)
+tjocr config set | set-key | set-url | show
+tjocr install                              # copia o binário para o PATH
+tjocr version | --version | -v             # mostra a versão
+tjocr help | --help | -h                   # ajuda
+```
 
 ## Uso
 
