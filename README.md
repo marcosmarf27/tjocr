@@ -102,8 +102,24 @@ tjocr matricula.pdf --enhance --pages 1-3 -o saida.md    # só nas páginas 1–
   e tem custo maior.
 - **Use** em documentos degradados (datilografados antigos, matrículas, scans ruins) onde a
   fidelidade de números/nomes importa.
-- **Cuidado:** é reconstrução por IA — pode **reescrever**, ou até inventar, um trecho. Revise
-  os dados críticos sempre que ligar.
+- **Cuidado:** é reconstrução por IA — pode **reescrever** um trecho; revise os dados críticos
+  sempre que ligar. Em páginas **genuinamente ilegíveis** ele mantém o **OCR cru** em vez de
+  deixar a IA inventar um texto plausível em cima do ruído (e te avisa — veja abaixo).
+
+### Status do enhance (sem fallback silencioso)
+
+A IA nem sempre consegue atuar (sem saldo no Gemini, página ilegível, etc.). O tjocr
+**não esconde** isso — ele te diz, no final, exatamente o que foi corrigido:
+
+| Mensagem (no stderr) | Significado |
+|----------------------|-------------|
+| `✓ Enhance IA: N/N páginas corrigidas` | A IA revisou **todas** as páginas de OCR |
+| `⚠ Enhance IA parcial: X/N páginas corrigidas` | Em algumas páginas a IA não atuou; **essas voltaram com o OCR cru** |
+| `⚠ Enhance IA NÃO atuou (0/N) — devolvendo OCR CRU` | Nada foi corrigido; o texto é o OCR puro. Vem com o **motivo** (ex.: créditos do Gemini esgotados, página ilegível) |
+| `ℹ Enhance: nenhuma página de OCR para corrigir` | O documento já era texto digital — não houve OCR a melhorar |
+
+Assim você **nunca paga nem espera por uma correção que não aconteceu** sem saber: se a IA
+falhou, a mensagem diz isso e o motivo, e o markdown traz o OCR cru daquela página.
 
 ## Como funciona
 
