@@ -105,6 +105,23 @@ tjocr matricula.pdf --enhance --pages 1-3 -o matricula.md
 tjocr doc.pdf | grep "CPF"
 ```
 
+## Documentos grandes e cancelamento (v0.2.0+)
+
+- **Documentos grandes** (centenas de páginas, até 1 GB): o servidor processa o OCR em
+  blocos automaticamente — nada a configurar. O tjocr escala o tempo de upload com o
+  tamanho do PDF e aguarda o processamento por até **90 minutos** (quedas momentâneas de
+  rede durante a espera não derrubam o job: ele continua no servidor e o tjocr reconecta).
+- **Ctrl+C cancela de verdade**: interromper o tjocr durante o processamento envia um
+  cancelamento ao servidor — o OCR é derrubado e o **ponto reservado é estornado**.
+  Antes (v0.1.x), o Ctrl+C só matava a espera local e o job continuava rodando (e
+  contando) órfão no servidor.
+
+```text
+^C
+cancelando o job 78c1788d-… no servidor (estorna o ponto)…
+✓ job cancelado; ponto reservado estornado.
+```
+
 ## Corrigir o OCR com IA (`--enhance`)
 
 O OCR já roda **automaticamente** — não há flag para ligá-lo: a API decide, página a página,
