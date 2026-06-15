@@ -144,23 +144,33 @@ O arquivo é criado com **permissão restrita** (`0600` — só o seu usuário l
 
 ### Variáveis de ambiente e precedência
 
-A chave pode vir de quatro fontes. O `tjocr` usa a **primeira** que encontrar, nesta ordem:
+A chave pode vir de várias fontes. O `tjocr` usa a **primeira** que encontrar, nesta ordem:
 
 ```
-1. --key KEY            (flag na linha de comando)
-2. env TJOCR_API_KEY    (variável de ambiente própria)
-3. config salvo         (tjocr config set)
-4. env TECJUSTICA_API_KEY   (legado — fallback de compatibilidade)
+1. --key KEY              (flag na linha de comando)
+2. env TJOCR_API_KEY      (variável de ambiente própria)
+3. config salvo           (tjocr config set)
+4. envs legadas           (compatibilidade — ver abaixo)
 ```
 
-> **Por que uma env própria `TJOCR_API_KEY`?** Para **não colidir** com `TECJUSTICA_API_KEY`, que
-> pode já estar definida para **outro serviço** no seu ambiente. Por isso a `TJOCR_API_KEY` e o
-> config salvo têm prioridade sobre a `TECJUSTICA_API_KEY` legada.
+As **envs legadas** existem para **não quebrar scripts** que já exportam a chave com outro nome
+(ou que a compartilham com outro serviço da TecJustiça). São consultadas nesta ordem, só depois do
+config salvo:
+
+```
+TECJUSTICA_API_KEY  →  TECJUSTICA_PARSE_API_KEY  →  TECJUSTICA_OCR_API_KEY
+```
+
+> **Por que uma env própria `TJOCR_API_KEY`?** Para **não colidir** com as legadas (`TECJUSTICA_*`),
+> que podem já estar definidas para **outro serviço** no seu ambiente. Por isso a `TJOCR_API_KEY` e
+> o config salvo têm prioridade sobre qualquer uma das legadas.
 
 | Variável | Uso |
 |----------|-----|
-| `TJOCR_API_KEY` | **Recomendada.** Sobrepõe o config salvo; útil em CI/scripts. |
-| `TECJUSTICA_API_KEY` | **Legado.** Só é usada se nada acima estiver definido. |
+| `TJOCR_API_KEY` | **Recomendada.** Sobrepõe o config salvo; ideal para CI/scripts. |
+| `TECJUSTICA_API_KEY` | Legado. Aceita por compatibilidade. |
+| `TECJUSTICA_PARSE_API_KEY` | Legado. Aceita por compatibilidade. |
+| `TECJUSTICA_OCR_API_KEY` | Legado. Aceita por compatibilidade. |
 
 Exemplos:
 
