@@ -27,6 +27,7 @@ tjocr *.pdf -d ./md/                      # lote   → vários .md em paralelo
 ## Índice
 
 - [O que é](#o-que-é)
+- [Instalação rápida (1 comando)](#instalação-rápida-1-comando)
 - [Download](#download)
 - [Instalação](#instalação)
 - [Configuração da chave](#configuração-da-chave)
@@ -58,6 +59,40 @@ Pensado para alimentar a etapa seguinte (ex.: a CLI [`tj-mapa`](https://github.c
 tjocr processo.pdf -o processo.md     # PDF → Markdown (OCR)
 tj-mapa processo.md                   # Markdown → mapa navegável do processo
 ```
+
+---
+
+## Instalação rápida (1 comando)
+
+Um único comando **baixa o binário certo, instala no PATH e pede sua chave** — deixando o `tjocr`
+pronto para usar. Rodar de novo apenas **atualiza** para a última versão.
+
+**Linux / WSL**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/marcosmarf27/tjocr/main/install.sh | bash
+```
+
+**Windows (PowerShell)**
+
+```powershell
+irm https://raw.githubusercontent.com/marcosmarf27/tjocr/main/install.ps1 | iex
+```
+
+> **Já tem a chave em mãos?** Passe-a junto e o instalador nem pergunta:
+>
+> ```bash
+> # Linux / WSL
+> curl -fsSL https://raw.githubusercontent.com/marcosmarf27/tjocr/main/install.sh | TJOCR_API_KEY=tjp_xxx bash
+> ```
+> ```powershell
+> # Windows
+> $env:TJOCR_API_KEY="tjp_xxx"; irm https://raw.githubusercontent.com/marcosmarf27/tjocr/main/install.ps1 | iex
+> ```
+
+O que o instalador faz: detecta seu SO, baixa o executável da última release, instala no PATH do
+usuário (`~/.local/bin` no Linux/WSL · `%LOCALAPPDATA%\Programs\tjocr` no Windows), e salva a chave
+no config. Sem `sudo`/admin, sem dependências. Prefere fazer na mão? Veja [Download](#download).
 
 ---
 
