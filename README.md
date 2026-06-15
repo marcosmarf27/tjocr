@@ -158,7 +158,7 @@ As **envs legadas** existem para **não quebrar scripts** que já exportam a cha
 config salvo:
 
 ```
-TECJUSTICA_API_KEY  →  TECJUSTICA_PARSE_API_KEY  →  TECJUSTICA_OCR_API_KEY
+TECJUSTICA_API_KEY  →  TECJUSTICA_PARSE_API_KEY  →  TECJUSTICA_OCR_API_KEY  →  TECJUSTICA_OCR_KEY
 ```
 
 > **Por que uma env própria `TJOCR_API_KEY`?** Para **não colidir** com as legadas (`TECJUSTICA_*`),
@@ -171,6 +171,7 @@ TECJUSTICA_API_KEY  →  TECJUSTICA_PARSE_API_KEY  →  TECJUSTICA_OCR_API_KEY
 | `TECJUSTICA_API_KEY` | Legado. Aceita por compatibilidade. |
 | `TECJUSTICA_PARSE_API_KEY` | Legado. Aceita por compatibilidade. |
 | `TECJUSTICA_OCR_API_KEY` | Legado. Aceita por compatibilidade. |
+| `TECJUSTICA_OCR_KEY` | Legado. Aceita por compatibilidade. |
 
 Exemplos:
 
